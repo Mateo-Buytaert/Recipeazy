@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazing Recipe Collection</title>
+    <style>
+        /* Base styles and color palette */
+        :root {
+            --primary-color: #2e7d32; /* Deep green */
+            --secondary-color: #66bb6a; /* Light green */
+            --text-color: #1b5e20; /* Dark green */
+            --background-color: #f9f9f9; /* Off-white */
+            --card-color: #ffffff; /* Pure white */
+            --accent-color: #81c784; /* Medium green */
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        /* Header styling */
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 3rem;
+            margin: 30px 0;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        h1::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background-color: var(--secondary-color);
+            border-radius: 2px;
+        }
+        
+        /* Recipe card container */
+        ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Recipe card styling */
+        li {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(46, 125, 50, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(46, 125, 50, 0.1);
+        }
+        
+        li:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(46, 125, 50, 0.15);
+        }
+        
+        li a {
+            display: block;
+            padding: 25px;
+            text-decoration: none;
+            color: inherit;
+            height: 100%;
+        }
+        
+        /* Recipe title */
+        li h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            border-bottom: 2px dashed var(--accent-color);
+            padding-bottom: 10px;
+        }
+        
+        /* Recipe description */
+        li p {
+            margin-bottom: 20px;
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+        
+        /* Time information */
+        li ol {
+            display: flex;
+            list-style: none;
+            gap: 15px;
+            margin-top: 15px;
+            background-color: rgba(102, 187, 106, 0.1);
+            padding: 10px 15px;
+            border-radius: 8px;
+        }
+        
+        li ol li {
+            background: none;
+            box-shadow: none;
+            padding: 0;
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            font-weight: 600;
+            border: none;
+        }
+        
+        li ol li:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* For empty state */
+        .empty-state {
+            text-align: center;
+            color: var(--text-color);
+            opacity: 0.7;
+            margin: 50px 0;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            ul {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Recipes</h1>
+    <ul>
+        {% if recipes %}
+        {% for recipe in recipes %}
+            <li>
+                <a href="{% url 'recipe-detail' id=recipe.id %}">
+                    <h2>{{ recipe.title }}</h2>
+                    <p>{{ recipe.description }}</p>
+                    <ol>
+                        <li>Prep time: {{ recipe.prep_time }}</li>
+                        <li>Cook time: {{ recipe.cook_time }}</li>
+                    </ol>
+                </a>
+            </li>
+        {% endfor %}
+        {% else %}
+            <p class="empty-state">No recipes to display. Add your first recipe!</p>
+        {% endif %}
+    </ul>
+</body>
+</html>
