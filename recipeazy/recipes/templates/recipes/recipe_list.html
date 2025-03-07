@@ -14,7 +14,15 @@
             --card-color: #ffffff; /* Pure white */
             --accent-color: #81c784; /* Medium green */
         }
-        
+        a {
+    color: var(--dark);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--primary);
+}
         * {
             margin: 0;
             padding: 0;
@@ -23,7 +31,7 @@
         }
         
         body {
-            background-color: var(--background-color);
+            background-color: #e8f3db;
             color: var(--text-color);
             padding: 20px;
             line-height: 1.6;
@@ -144,27 +152,87 @@
                 grid-template-columns: 1fr;
             }
         }
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 35px;
+        }
+
+        .recipe-card {
+    background-color: white;
+    border-radius: 20px;
+    overflow: hidden;
+    .recipe-card {
+    background-color: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    opacity: 0;
+    transform: translateY(30px);
+    height: 100%;
+}
+}
+
+.recipe-card:hover {
+    transform: translateY(-12px);
+    box-shadow: var(--shadow-xl);
+}
+
+.recipe-img {
+    height: 230px;
+    background-color: var(--accent);
+    position: relative;
+    overflow: hidden;
+}
+
+.recipe-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.recipe-card:hover .recipe-img img {
+    transform: scale(1.08);
+}
     </style>
 </head>
 <body>
     <h1>Recipes</h1>
-    <ul>
-        {% if recipes %}
-        {% for recipe in recipes %}
-            <li>
-                <a href="{% url 'recipe-detail' id=recipe.id %}">
-                    <h2>{{ recipe.title }}</h2>
-                    <p>{{ recipe.description }}</p>
-                    <ol>
-                        <li>Prep time: {{ recipe.prep_time }}</li>
-                        <li>Cook time: {{ recipe.cook_time }}</li>
-                    </ol>
-                </a>
-            </li>
-        {% endfor %}
-        {% else %}
-            <p class="empty-state">No recipes to display. Add your first recipe!</p>
-        {% endif %}
-    </ul>
+    <div class="section-header">
+        <h2>Recipes that meet your search</h2>
+    </div>
+    <br>
+    <br>
+    {%for recipe in recipes%}
+    <a href="{% url 'recipe-detail' id=recipe.id %}" style="text-decoration:none">
+    <div class="recipe-grid">
+        <div class="recipe-card">
+            <div class="recipe-img">
+                {% if recipe.image %}
+                    <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" width="300">
+                {% endif %}
+                <div class="recipe-time">{{recipe.cook_time}} minutes</div>
+            </div>
+            <div class="recipe-content">
+                <div class="recipe-tags">
+                    <span class="recipe-tag">Italian</span>
+                    <span class="recipe-tag">Pasta</span>
+                </div>
+                <h3 class="recipe-title">{{recipe.title}}</h3>
+                <p class="recipe-desc">{{recipe.description}}</p></p>
+                <div class="recipe-meta">
+                    <div class="recipe-rating">
+                        ★★★★★ 5
+                    </div>
+                    <div class="recipe-author">
+                        <span>Chef Mateo the great</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+        {%endfor%}
 </body>
 </html>

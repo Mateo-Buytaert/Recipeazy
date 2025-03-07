@@ -25,12 +25,13 @@ def recipe_detail(request, id):
         "recipe":recipe,
         "ingredients":ingredients
     })
-def search_recipe(request, search):
+def search_recipe(request):
     query = request.GET.get("q")
-    recipe = Recipe.objects.filter(title==query)
-    ingredients = recipe.ingredients
-    ingredients = ingredients.split(", ")
-    return render(request,"recipes/recipe_detail.html",{
-        "recipe":recipe,
+    recipes = Recipe.objects.filter(title__icontains="Pesto Pasta")
+    ingredients = []
+    for recipe in recipes:
+        ingredients.append(recipe.ingredients)
+    return render(request,"recipes/recipe_list.html",{
+        "recipes":recipes,
         "ingredients":ingredients
     })
