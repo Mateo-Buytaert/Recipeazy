@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Recipe, Cuisine
+from .models import Recipe, Cuisine, Category
 
 # Register your models here.
 
@@ -7,3 +7,4 @@ from .models import Recipe, Cuisine
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ('title', 'prep_time', 'cook_time', 'servings')
 admin.site.register(Cuisine)
+admin.site.register(Category)

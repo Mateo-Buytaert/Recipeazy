@@ -27,7 +27,7 @@ def recipe_detail(request, id):
     })
 def search_recipe(request):
     query = request.GET.get("q")
-    recipes = Recipe.objects.filter(title__icontains="Pesto Pasta")
+    recipes = Recipe.objects.filter(title__icontains=query)
     ingredients = []
     for recipe in recipes:
         ingredients.append(recipe.ingredients)

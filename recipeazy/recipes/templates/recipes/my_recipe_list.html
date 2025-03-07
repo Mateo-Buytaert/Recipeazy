@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -903,27 +904,26 @@ button, .btn, .recipe-card, .category-card {
                 <h2>Categories of food</h2>
             </div>
             <div class="category-container">
-                
                 <div class="category-card">
-                    <img src="ssert.jpeg" alt="Desserts">
+                    <img src="{% static 'images/breakfast.jpeg' %}" alt="Quick meals">
                     <div class="category-content">
-                        <h3>Desserts</h3>
+                        <h3>Breakfast</h3>
                     </div>
                 </div>
-                
                 <div class="category-card">
-                    <img src="main.jpeg" alt="Vegetarian food">
+                    <img src="{% static 'images/lunch.jpeg' %}" alt="Mains">
                     <div class="category-content">
                         <h3>Mains</h3>
                     </div>
                 </div>
                 
                 <div class="category-card">
-                    <img src="breakfast.jpeg" alt="Quick meals">
+                    <img src="{% static 'images/ssert.jpeg' %}" alt="Example Image">
                     <div class="category-content">
-                        <h3>Breakfast</h3>
+                        <h3>Desserts</h3>
                     </div>
                 </div>
+                
             </div>
         </div>
     </section>

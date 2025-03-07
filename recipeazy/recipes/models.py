@@ -6,6 +6,11 @@ class Cuisine(models.Model):
     def __str__(self):
         return self.name
 
+class Category(models.Model):
+    name = models.CharField(max_length=250)
+    def __str__(self):
+        return self.name
+
 class Recipe(models.Model):
     title = models.CharField(max_length=30)
     description = models.TextField(default="")
@@ -17,5 +22,14 @@ class Recipe(models.Model):
     image = models.ImageField(upload_to="images/")
     stars = models.PositiveIntegerField(default=0)
     cuisine = models.ManyToManyField(Cuisine)
+    category = models.ManyToManyField(Category)
+    # category_choices = {
+    #     "breakfast":"breakfast",
+    #     "lunch":"lunch",
+    #     "dinner":"dinner",
+    #     "dessert":"dessert",
+    #     "snack":"snack"
+    # }
+    # category = models.CharField(choices = category_choices, max_length=10, default="none")
     def __str__(self):
         return self.title
