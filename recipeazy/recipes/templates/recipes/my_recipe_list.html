@@ -310,7 +310,8 @@ nav {
 .recipe-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 35px;
+    gap: 20px; /* Reduced from 35px */
+    margin-bottom: 30px; /* Add bottom margin between recipe rows */
 }
 
 .recipe-card {
@@ -363,6 +364,26 @@ nav {
     padding: 25px;
 }
 
+.recipe-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+@media (max-width: 992px) {
+    .recipe-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 15px; /* Further reduced for smaller screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .recipe-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        max-width: none; /* Remove the max-width restriction */
+        margin: 0 auto;
+    }
+}
 .recipe-tags {
     display: flex;
     gap: 10px;
@@ -709,35 +730,35 @@ button, .btn, .recipe-card, .category-card {
                 <h2>Recipes of the day</h2>
                 <p>The most popular recipes of today.</p>
             </div>
-            {%for recipe in recipes%}
-            <a href="{% url 'recipe-detail' id=recipe.id %}" style="text-decoration:none">
             <div class="recipe-grid">
-                <div class="recipe-card">
-                    <div class="recipe-img">
-                        {% if recipe.image %}
-                            <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" width="300">
-                        {% endif %}
-                        <div class="recipe-time">{{recipe.cook_time}} minutes</div>
-                    </div>
-                    <div class="recipe-content">
-                        <div class="recipe-tags">
-                            <span class="recipe-tag">Italian</span>
-                            <span class="recipe-tag">Pasta</span>
+                {% for recipe in recipes %}
+                <a href="{% url 'recipe-detail' id=recipe.id %}" style="text-decoration:none">
+                    <div class="recipe-card">
+                        <div class="recipe-img">
+                            {% if recipe.image %}
+                                <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" width="300">
+                            {% endif %}
+                            <div class="recipe-time">{{recipe.cook_time}} minutes</div>
                         </div>
-                        <h3 class="recipe-title">{{recipe.title}}</h3>
-                        <p class="recipe-desc">{{recipe.description}}</p></p>
-                        <div class="recipe-meta">
-                            <div class="recipe-rating">
-                                ★★★★★ 5
+                        <div class="recipe-content">
+                            <div class="recipe-tags">
+                                <span class="recipe-tag">Italian</span>
+                                <span class="recipe-tag">Pasta</span>
                             </div>
-                            <div class="recipe-author">
-                                <span>Chef Mateo the great</span>
+                            <h3 class="recipe-title">{{recipe.title}}</h3>
+                            <p class="recipe-desc">{{recipe.description}}</p>
+                            <div class="recipe-meta">
+                                <div class="recipe-rating">
+                                    ★★★★★ 5
+                                </div>
+                                <div class="recipe-author">
+                                    <span>Chef Mateo the great</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </a>
-                {%endfor%}
+                </a>
+                {% endfor %}
             </div>
         </div>
     </section>
@@ -775,17 +796,14 @@ button, .btn, .recipe-card, .category-card {
 
 
     <script>
-        // Scroll animation for recipe cards
         const recipeCards = document.querySelectorAll('.recipe-card');
         const categoryCards = document.querySelectorAll('.category-card');
         const newsletterContent = document.querySelector('.newsletter-content');
         
-        // Header hide on scroll down, show on scroll up
         let lastScrollTop = 0;
         const header = document.getElementById('header');
         
         window.addEventListener('scroll', function() {
-            // Header scroll behavior
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             if (scrollTop > lastScrollTop && scrollTop > 200) {
                 header.classList.add('hidden');
@@ -794,7 +812,6 @@ button, .btn, .recipe-card, .category-card {
             }
             lastScrollTop = scrollTop;
             
-            // Animate recipe cards on scroll
             recipeCards.forEach((card, index) => {
                 const cardTop = card.getBoundingClientRect().top;
                 const cardBottom = card.getBoundingClientRect().bottom;
@@ -807,7 +824,6 @@ button, .btn, .recipe-card, .category-card {
                 }
             });
             
-            // Animate category cards on scroll
             categoryCards.forEach((card, index) => {
                 const cardTop = card.getBoundingClientRect().top;
                 const cardBottom = card.getBoundingClientRect().bottom;
@@ -820,7 +836,6 @@ button, .btn, .recipe-card, .category-card {
                 }
             });
             
-            // Animate newsletter section
             const newsletterTop = newsletterContent.getBoundingClientRect().top;
             const windowHeight = window.innerHeight;
             
@@ -829,7 +844,6 @@ button, .btn, .recipe-card, .category-card {
             }
         });
         
-        // Trigger initial scroll to animate elements in view
         window.dispatchEvent(new Event('scroll'));
     </script>
 </body>
