@@ -1,12 +1,14 @@
 from django.shortcuts import render, reverse, redirect, get_object_or_404, HttpResponse
 from .models import Recipe
-from .forms import RecipeForm
+from .forms import RecipeForm, CreateUserForm
 from django.db.models import Q
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 
 def recipe_list(request):
     if request.method == "GET":
         recipes = Recipe.objects.all()
-        #categories = recipe.category.all()
         return render(request, 'recipes/my_recipe_list.html', {'recipes': recipes})
 
 def recipe_create(request):
@@ -35,10 +37,28 @@ def search_recipe(request):
                 Q(category__name__icontains=query)
             ).distinct() 
     ingredients = []
-    #categories = recipe.category.all()
     for recipe in recipes:
         ingredients.append(recipe.ingredients)
     return render(request,"recipes/recipe_list.html",{
         "recipes":recipes,
         "ingredients":ingredients,
     })
+def registerPage(request):
+    form = CreateUserForm()
+
+    if request.method == "POST":
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            user = form.cleaned_data.get("username")
+            messages.success(request, "Account was created for "+user)
+            return redirect("login")
+    return render(request, "recipes/register.html",{
+        "form":form
+    })
+
+def loginPage(request):
+    if request.method=="POST":
+        request.POST.get("username")
+        request.POST.get("password")
+    return render(request,"recipes/login.html")

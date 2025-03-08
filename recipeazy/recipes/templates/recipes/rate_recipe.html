@@ -1,7 +1,0 @@
-<h1>Rate {{ recipe.title }}</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Submit Rating</button>
-</form>
-<p>Current Average Rating: {{ recipe.average_rating|floatformat:1 }} / 5 ({{ recipe.total_ratings }} ratings)</p>

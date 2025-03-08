@@ -162,14 +162,16 @@
 
         /* Recipe Detail Styles */
         .recipe-detail {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 30px;
-            background-color: white;
-            border-radius: 20px;
-            box-shadow: var(--shadow-lg);
-            animation: fadeIn 0.8s ease;
-        }
+    max-width: 1200px; /* Increased from 800px to accommodate side-by-side layout */
+    margin: 40px auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: var(--shadow-lg);
+    animation: fadeIn 0.8s ease;
+    display: flex;
+    gap: 40px;
+}
 
         .recipe-title {
             font-size: 2.5rem;
@@ -183,17 +185,49 @@
 
         .recipe-image {
             width: 100%;
-            max-height: 400px;
-            object-fit: cover;
-            border-radius: 12px;
-            box-shadow: var(--shadow-md);
-            margin-bottom: 30px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    aspect-ratio: 3/4; /* Maintains consistent image proportion */
+    object-fit: cover;
         }
 
         .recipe-section {
             margin-bottom: 30px;
         }
+        .recipe-content-column {
+    flex: 1;
+}
+@media (max-width: 992px) {
+    .recipe-detail {
+        flex-direction: column;
+        gap: 30px;
+    }
 
+    .recipe-image-column {
+        flex: 0 0 auto;
+        position: relative;
+        top: 0;
+    }
+
+    .recipe-image {
+        max-height: 400px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .recipe-detail {
+        padding: 20px;
+        margin: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .recipe-detail {
+        margin: 10px;
+        padding: 15px;
+    }
+}
         .section-title {
             font-size: 1.8rem;
             color: var(--dark);
@@ -284,6 +318,12 @@
                 font-size: 1.8rem;
             }
         }
+        .recipe-image-column {
+    flex: 0 0 40%; /* Takes up 40% of the container width */
+    position: sticky;
+    top: 100px; /* Accounts for header height plus some spacing */
+    align-self: flex-start;
+}
 
     </style>
 </head>
@@ -305,35 +345,43 @@
             </nav>
         </div>
     </header>
-    
     <div class="container">
         <div class="recipe-detail">
-            <h1 class="recipe-title">{{recipe.title}}</h1>
-            {% if recipe.image %}
-                <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe-image">
-            {% endif %}
-            <br>
-            <hr>
-            <br>
-            <p>{{recipe.description}}</p>
-            <br>
-            <hr>
-            <br>
-            <p>Prep time: {{recipe.prep_time}} minute{{recipe.prep_time | pluralize}}</p>
-            <p>Cook time: {{recipe.cook_time}} minute{{recipe.prep_time | pluralize}}</p>
-            <div class="recipe-section">
-
-                <h3 class="section-title">Ingredients</h3>
-                <div class="ingredients-list">
-                    {%for ingredient in ingredients%}
-                        <div class="ingredient-item">{{ingredient}}</div>
-                    {%endfor%}
-                </div>
+            <!-- Left column for image -->
+            <div class="recipe-image-column">
+                {% if recipe.image %}
+                    <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe-image">
+                {% endif %}
             </div>
             
-            <div class="recipe-section">
-                <h3 class="section-title">Method</h3>
-                <div class="method-container">{{recipe.method}}</div>
+            <!-- Right column for content -->
+            <div class="recipe-content-column">
+                <h1 class="recipe-title">{{recipe.title}}</h1>
+                <br>
+                <hr>
+                <br>
+                <p>{{recipe.description}}</p>
+                <br>
+                <hr>
+                <br>
+                <p>Prep time: {{recipe.prep_time}} minute{{recipe.prep_time | pluralize}}</p>
+                <p>Cook time: {{recipe.cook_time}} minute{{recipe.prep_time | pluralize}}</p>
+                <br>
+                <p>Serves {{recipe.servings}}</p>
+                
+                <div class="recipe-section">
+                    <h3 class="section-title">Ingredients</h3>
+                    <div class="ingredients-list">
+                        {%for ingredient in ingredients%}
+                            <div class="ingredient-item">{{ingredient}}</div>
+                        {%endfor%}
+                    </div>
+                </div>
+                
+                <div class="recipe-section">
+                    <h3 class="section-title">Method</h3>
+                    <div class="method-container">{{recipe.method}}</div>
+                </div>
             </div>
         </div>
     </div>
