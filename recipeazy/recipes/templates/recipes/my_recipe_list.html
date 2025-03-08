@@ -884,7 +884,7 @@ button, .btn, .recipe-card, .category-card {
                             <p class="recipe-desc">{{recipe.description}}</p>
                             <div class="recipe-meta">
                                 <div class="recipe-rating">
-                                    ★★★★★ 5
+                                    {{recipe.stars}}/5
                                 </div>
                                 <div class="recipe-author">
                                     <span>Chef Mateo the great</span>
@@ -916,7 +916,7 @@ button, .btn, .recipe-card, .category-card {
                         <h3>Mains</h3>
                     </div>
                 </div>
-                
+                <a href=""{%url 'search-recipe' %}
                 <div class="category-card">
                     <img src="{% static 'images/ssert.jpeg' %}" alt="Example Image">
                     <div class="category-content">

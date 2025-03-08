@@ -312,8 +312,17 @@
             {% if recipe.image %}
                 <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe-image">
             {% endif %}
-            
+            <br>
+            <hr>
+            <br>
+            <p>{{recipe.description}}</p>
+            <br>
+            <hr>
+            <br>
+            <p>Prep time: {{recipe.prep_time}} minute{{recipe.prep_time | pluralize}}</p>
+            <p>Cook time: {{recipe.cook_time}} minute{{recipe.prep_time | pluralize}}</p>
             <div class="recipe-section">
+
                 <h3 class="section-title">Ingredients</h3>
                 <div class="ingredients-list">
                     {%for ingredient in ingredients%}
@@ -327,6 +336,8 @@
                 <div class="method-container">{{recipe.method}}</div>
             </div>
         </div>
+        <p>Average Rating:  / 5 ({{ recipe.total_ratings }} ratings)</p>
+    <a href="{% url 'rate_recipe' recipe.id %}">Rate this recipe</a>
     </div>
 </body>
 </html>
