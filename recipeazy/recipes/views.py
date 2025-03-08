@@ -5,12 +5,14 @@ from django.db.models import Q
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 def recipe_list(request):
     if request.method == "GET":
         recipes = Recipe.objects.all()
         return render(request, 'recipes/my_recipe_list.html', {'recipes': recipes})
 
+@login_required(login_url="login")
 def recipe_create(request):
     if request.method == 'POST':
         form = RecipeForm(request.POST, request.FILES)
@@ -44,21 +46,40 @@ def search_recipe(request):
         "ingredients":ingredients,
     })
 def registerPage(request):
-    form = CreateUserForm()
+    if request.user.is_authenticated:
+        return redirect("recipe_list")
+    else:
+        form = CreateUserForm()
 
-    if request.method == "POST":
-        form = CreateUserForm(request.POST)
-        if form.is_valid():
-            form.save()
-            user = form.cleaned_data.get("username")
-            messages.success(request, "Account was created for "+user)
-            return redirect("login")
-    return render(request, "recipes/register.html",{
-        "form":form
-    })
+        if request.method == "POST":
+            form = CreateUserForm(request.POST)
+            if form.is_valid():
+                form.save()
+                user = form.cleaned_data.get("username")
+                messages.success(request, "Account was created for "+user)
+                return redirect("login")
+
+        return render(request, "recipes/register.html",{
+            "form":form
+        })
 
 def loginPage(request):
-    if request.method=="POST":
-        request.POST.get("username")
-        request.POST.get("password")
-    return render(request,"recipes/login.html")
+    if request.user.is_authenticated:
+        return redirect("recipe_list")
+    else:
+        if request.method=="POST":
+            username = request.POST.get("username")
+            password = request.POST.get("password")
+            user = authenticate(request, username=username,password=password)
+
+            if user is not None:
+                login(request,user)
+                return redirect("recipe_list")
+            else:
+                messages.info(request,"Username or password is incorrect")
+
+        return render(request,"recipes/login.html")
+
+def logoutUser(request):
+    logout(request)
+    return redirect("recipe_list")

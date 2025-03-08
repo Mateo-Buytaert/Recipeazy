@@ -7,7 +7,7 @@ from django.forms import ModelForm
 class RecipeForm(forms.ModelForm):
     class Meta:
         model = Recipe
-        fields = ['title', 'description', 'prep_time', 'cook_time', 'servings', 'ingredients',"method","image", "cuisine", "category"]
+        fields = ['title','cook_time', 'servings',"difficulty","description", 'ingredients',"method","image", "cuisine", "category"]
 
 class CreateUserForm(UserCreationForm):
     class Meta:

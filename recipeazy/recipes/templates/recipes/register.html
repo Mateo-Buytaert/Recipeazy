@@ -9,7 +9,7 @@
                        name="username" 
                        id="id_username" 
                        class="form-input" 
-                       placeholder="Choose a unique username (e.g., chef_john)" 
+                       placeholder="Choose a username" 
                        required
                        autocomplete="off">
             </div>
@@ -32,7 +32,6 @@
                        placeholder="Create a strong password (min. 8 characters)" 
                        required
                        autocomplete="new-password">
-                <span class="password-requirements">Password must contain letters, numbers, and special characters</span>
             </div>
             <div class="form-group">
                 <label for="id_password2" class="form-label">Confirm Password</label>
@@ -78,7 +77,9 @@
     background-color: var(--light);
     padding: 20px;
 }
-
+body {
+    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 .auth-card {
     background-color: white;
     border-radius: 20px;
