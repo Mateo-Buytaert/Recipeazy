@@ -877,8 +877,11 @@ button, .btn, .recipe-card, .category-card {
                         </div>
                         <div class="recipe-content">
                             <div class="recipe-tags">
-                                <span class="recipe-tag">Italian</span>
-                                <span class="recipe-tag">Pasta</span>
+                                {%for cuisine in recipe.cuisine.all%}
+                                    {%if cuisine.name != "none" %}
+                                        <span class="recipe-tag">{{cuisine.name}}</span>
+                                    {%endif%}
+                                {%endfor%}
                             </div>
                             <h3 class="recipe-title">{{recipe.title}}</h3>
                             <p class="recipe-desc">{{recipe.description}}</p>

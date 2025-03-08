@@ -1,27 +1,13 @@
 from django.shortcuts import render, reverse, redirect, get_object_or_404, HttpResponse
-from .models import Recipe, Rating
-from .forms import RecipeForm, RatingForm
+from .models import Recipe
+from .forms import RecipeForm
 from django.db.models import Q
 
 def recipe_list(request):
     if request.method == "GET":
         recipes = Recipe.objects.all()
+        #categories = recipe.category.all()
         return render(request, 'recipes/my_recipe_list.html', {'recipes': recipes})
-
-def rate_recipe(request, recipe_id):
-    recipe = get_object_or_404(Recipe, id=recipe_id)
-    if request.method == 'POST':
-        form = RatingForm(request.POST)
-        if form.is_valid():
-            rating, created = Rating.objects.update_or_create(
-                recipe=recipe,
-                user=request.user,
-                defaults={'stars': form.cleaned_data['stars']}
-            )
-            return redirect('recipe_detail', recipe_id=recipe.id)
-    else:
-        form = RatingForm()
-    return render(request, 'recipes/rate_recipe.html', {'form': form, 'recipe': recipe})
 
 def recipe_create(request):
     if request.method == 'POST':
@@ -49,20 +35,10 @@ def search_recipe(request):
                 Q(category__name__icontains=query)
             ).distinct() 
     ingredients = []
+    #categories = recipe.category.all()
     for recipe in recipes:
         ingredients.append(recipe.ingredients)
     return render(request,"recipes/recipe_list.html",{
         "recipes":recipes,
-        "ingredients":ingredients
+        "ingredients":ingredients,
     })
-
-def rate_recipe(request,recipe_id):
-    recipe = get_object_or_404(Recipe, id=recipe_id)
-    if request.method == 'POST':
-        form = RatingForm(request.POST, instance=recipe)
-        if form.is_valid():
-            form.save()
-            return redirect('recipe_detail', recipe_id=recipe.id)
-    else:
-        form = RatingForm(instance=recipe)
-    return render(request, 'recipes/rate_recipe.html', {'form': form, 'recipe': recipe})
