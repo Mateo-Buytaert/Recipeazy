@@ -404,7 +404,7 @@ body {
             <nav>
                 <div class="logo">Recipe<span>Eazy</span></div>
                 <div class="nav-links">
-                    <a href="{%url 'recipe_list'%}" class="active">Home</a>
+                    <a href="{%url 'index'%}" class="active">Home</a>
                     <a href="#">About</a>
                 </div>
                 <div class="search-bar">
@@ -413,12 +413,26 @@ body {
                         <button type="submit">Search</button>
                     </form>
                 </div>
+                <div class "nav-links">
+                    {%if user.is_authenticated%}
+                    <a href ="{%url 'logout'%}">Logout</a>
+                    {%endif%}
+                    {%if not user.is_authenticated%}
+                    <a href ="{%url 'login'%}">Login</a>
+                    {%endif%}
+                </div>
             </nav>
         </div>
     </header>
     <br>
     <br>
     <div class="container">
+        <div class="search-bar">
+            <form action="{% url 'search-recipe' %}" method="get">
+                <input type="text" name="q" placeholder="Enter recipe name..." required>
+                <button type="submit">Search</button>
+            </form>
+        </div>
         <div class="section-header">
             <h2>Search results</h2>
         </div>
@@ -436,8 +450,11 @@ body {
                     </div>
                     <div class="recipe-content">
                         <div class="recipe-tags">
-                            <span class="recipe-tag">Italian</span>
-                            <span class="recipe-tag">Pasta</span>
+                            {%for cuisine in recipe.cuisine.all%}
+                                    {%if cuisine.name != "none" %}
+                                        <span class="recipe-tag">{{cuisine.name}}</span>
+                                    {%endif%}
+                                {%endfor%}
                         </div>
                         <h3 class="recipe-title">{{recipe.title}}</h3>
                         <p class="recipe-desc">{{recipe.description}}</p>

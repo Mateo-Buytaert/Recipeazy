@@ -7,10 +7,18 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
-def recipe_list(request):
+def index(request):
     if request.method == "GET":
         recipes = Recipe.objects.all()
         return render(request, 'recipes/my_recipe_list.html', {'recipes': recipes})
+
+def recipe_list(request):
+    recipes = Recipe.objects.all()
+    ingredients = []
+    for recipe in recipes:
+        ingredients.append(recipe.ingredients)
+    return render(request,"recipes/recipe_list.html",{"recipes":recipes, "ingredients":ingredients})
+
 
 @login_required(login_url="login")
 def recipe_create(request):
@@ -18,7 +26,7 @@ def recipe_create(request):
         form = RecipeForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('recipe_list')
+            return redirect('index')
     else:
         form = RecipeForm()
     return render(request, 'recipes/recipe_form.html', {'form': form})
@@ -47,7 +55,7 @@ def search_recipe(request):
     })
 def registerPage(request):
     if request.user.is_authenticated:
-        return redirect("recipe_list")
+        return redirect("index")
     else:
         form = CreateUserForm()
 
@@ -65,7 +73,7 @@ def registerPage(request):
 
 def loginPage(request):
     if request.user.is_authenticated:
-        return redirect("recipe_list")
+        return redirect("index")
     else:
         if request.method=="POST":
             username = request.POST.get("username")
@@ -74,7 +82,7 @@ def loginPage(request):
 
             if user is not None:
                 login(request,user)
-                return redirect("recipe_list")
+                return redirect("index")
             else:
                 messages.info(request,"Username or password is incorrect")
 
@@ -82,4 +90,8 @@ def loginPage(request):
 
 def logoutUser(request):
     logout(request)
-    return redirect("recipe_list")
+    return redirect("index")
+
+class profile(request):
+    if request.user.is_authenticated:
+        username = request.POST.get("username")
