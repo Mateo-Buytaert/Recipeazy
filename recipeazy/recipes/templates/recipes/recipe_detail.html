@@ -114,6 +114,7 @@
             left: 0;
             background-color: var(--primary);
             transition: width 0.3s ease;
+            display:none;
         }
 
         #header .nav-links a:hover {
@@ -401,6 +402,127 @@
         grid-template-columns: 1fr;
     }
 }
+/* Rating Section Styles */
+.user-rating-section {
+    background-color: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    margin-top: 30px;
+}
+
+.user-rating-section h3 {
+    font-size: 1.8rem;
+    color: var(--dark);
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* Star Rating Styles */
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 5px;
+    margin-bottom: 15px;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 30px;
+    color: var(--gray-300);
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input:checked ~ label {
+    color: var(--primary);
+}
+
+/* Rating Message Styles */
+.rating-message {
+    background-color: var(--light);
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+    color: var(--gray-800);
+    font-size: 0.95rem;
+}
+
+/* Rating Submit Button */
+.rating-submit-btn {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.rating-submit-btn:hover {
+    background-color: var(--primary-light);
+    transform: translateY(-2px);
+}
+
+/* Login Prompt Styles */
+.rating-login-prompt {
+    background-color: var(--light);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.rating-login-prompt p {
+    color: var(--gray-800);
+    font-size: 0.95rem;
+}
+
+.rating-login-prompt a {
+    color: var(--primary);
+    font-weight: 500;
+    text-decoration: underline;
+}
+
+.rating-login-prompt a:hover {
+    color: var(--primary-light);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .user-rating-section {
+        padding: 20px;
+    }
+    
+    .user-rating-section h3 {
+        font-size: 1.5rem;
+    }
+    
+    .star-rating label {
+        font-size: 25px;
+    }
+}
+
+@media (max-width: 480px) {
+    .user-rating-section {
+        padding: 15px;
+    }
+    
+    .star-rating {
+        justify-content: center;
+    }
+    
+    .rating-submit-btn {
+        width: 100%;
+    }
+}
     </style>
 </head>
 <body>
@@ -419,12 +541,13 @@
                         <button type="submit">Search</button>
                     </form>
                 </div>
-                <div class "nav-links">
+                <div class="nav-links">
                     {%if user.is_authenticated%}
                     <a href ="{%url 'logout'%}">Logout</a>
                     {%endif%}
                     {%if not user.is_authenticated%}
                     <a href ="{%url 'login'%}">Login</a>
+                    <a href="{%url 'register'%}">Register</a>
                     {%endif%}
                 </div>
             </nav>
@@ -441,7 +564,17 @@
             <div class="recipe-content-column">
                 <h1 class="recipe-title">{{recipe.title}}</h1>
                 <br>
-                <span class="info-value">Created by: {{user}}</span>
+                {% with ''|center:5 as stars %}
+                {% for _ in stars %}
+                    {% if forloop.counter <= avg_rating %}
+                        <span class="star filled">★</span>
+                    {% elif forloop.counter <= avg_rating|add:0.5 %}
+                        <span class="star half-filled">★</span>
+                    {% else %}
+                        <span class="star empty">☆</span>
+                    {% endif %}
+                {% endfor %}
+                {% endwith %}
                 <div class="recipe-quick-info">
                     <div class="info-card">
                         <i class="fas fa-clock"></i>
@@ -481,8 +614,36 @@
                     <h3 class="section-title">Method</h3>
                     <div class="method-container">{{recipe.method}}</div>
                 </div>
+        <div class="user-rating-section">
+            <h3>Your Rating</h3>
+            {% if user.is_authenticated %}
+                <form id="rating-form" method="post" action="">
+                    {% csrf_token %}
+                    <div class="star-rating">
+                        {% for i in "12345" %}
+                            <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}" 
+                                {% if user_rating and user_rating.value == forloop.counter %}checked{% endif %}>
+                            <label for="star{{ i }}" title="{{ forloop.counter }} star">☆</label>
+                        {% endfor %}
+                    </div>
+                    <div class="rating-message" id="rating-message">
+                        {% if user_rating %}
+                            You rated this recipe {{ user_rating.value }} star{% if user_rating.value > 1 %}s{% endif %}.
+                        {% else %}
+                            Select a rating and click submit!
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="rating-submit-btn">Submit Rating</button>
+                </form>
+            {% else %}
+                <div class="rating-login-prompt">
+                    <p>Please <a href="{% url 'login' %}">log in</a> to rate this recipe.</p>
+                </div>
+            {% endif %}
+        </div>
             </div>
         </div>
+        
     </div>
 </body>
 </html>

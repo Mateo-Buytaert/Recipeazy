@@ -1,11 +1,13 @@
 from django.shortcuts import render, reverse, redirect, get_object_or_404, HttpResponse
-from .models import Recipe
-from .forms import RecipeForm, CreateUserForm, UserUpdateForm, ProfileUpdateForm
-from django.db.models import Q
+from .models import Recipe, Rating
+from .forms import RecipeForm, CreateUserForm, UserUpdateForm, ProfileUpdateForm, RatingForm
+from django.db.models import Q, Avg
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+import math
 
 def index(request):
     if request.method == "GET":
@@ -35,11 +37,28 @@ def recipe_detail(request, id):
     recipe = get_object_or_404(Recipe, id=id)
     ingredients = recipe.ingredients
     ingredients = ingredients.split(", ")
-    user = request.user
+    if request.method == 'POST' and request.user.is_authenticated:
+        rating_value = request.POST.get('rating')
+        if rating_value:
+            rating, created = Rating.objects.get_or_create(
+                recipe=recipe,
+                user=request.user,
+                defaults={'value': rating_value}
+            )
+            if not created:
+                rating.value = rating_value
+                rating.save()
+    avg_rating = recipe.ratings.aggregate(Avg('value'))['value__avg'] or 0
+    
+    user_rating = None
+    if request.user.is_authenticated:
+        user_rating = Rating.objects.filter(recipe=recipe, user=request.user).first()
+    avg_rating = round(avg_rating)
     return render(request,"recipes/recipe_detail.html",{
         "recipe":recipe,
         "ingredients":ingredients,
-        "user":user
+        "avg_rating":avg_rating,
+        "user_rating":user_rating
     })
     
 def search_recipe(request):
