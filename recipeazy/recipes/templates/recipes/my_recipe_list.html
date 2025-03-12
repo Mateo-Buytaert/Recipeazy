@@ -980,7 +980,8 @@ button, .btn, .recipe-card, .category-card {
                 <div class="logo">Recip<span>Eazy</span></div>
                 <div class="nav-links">
                     <a href="#" class="active">Home</a>
-                    <a href="#">About</a>
+                    <a href="{%url 'recipe_list'%}" class ="active">Recipes</a>
+                    <a href = "{%url 'profile'%}" class="active">Profile</a>
                 </div>
                 <div class="search-bar">
                     <form action="{% url 'search-recipe' %}" method="get">
@@ -1012,7 +1013,7 @@ button, .btn, .recipe-card, .category-card {
                     </div>
                 </div>
                 <p>The best recipes in one place. </p>
-                <a href="#" class="btn">Recipes</a>
+                <a href="{%url 'recipe_list'%}" class="btn">Recipes</a>
             </div>
         </div>
     </section>

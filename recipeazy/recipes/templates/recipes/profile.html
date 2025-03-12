@@ -300,7 +300,8 @@ body {
                 <div class="logo">Recip<span>Eazy</span></div>
                 <div class="nav-links">
                     <a href="{% url 'index' %}" class="active">Home</a>
-                    <a href="#">About</a>
+                    <a href="{%url 'recipe_list'%}" class ="active">Recipes</a>
+                    <a href = "{%url 'profile'%}" class="active">Profile</a>
                 </div>
                 <div class="search-bar">
                     <form action="{% url 'search-recipe' %}" method="get">
@@ -320,7 +321,16 @@ body {
         </div>
     </header>
     <div class="container h-100">
-        
+        <br>
+        <h2>{{user.username}}</h2>
+        <p>Email: {{user.email}}</p>
+        <img src = "{{user.profile.profile_pic.url}}">
     </div>
+    <form method="POST">
+        {%csrf_token%}
+        {{u_form}}
+        {{p_form}}
+        <button type="submit">Update</button>
+    </form>
 </body>
 </html>

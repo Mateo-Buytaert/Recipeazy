@@ -410,7 +410,8 @@
                 <div class="logo">Recipe<span>Eazy</span></div>
                 <div class="nav-links">
                     <a href="{%url 'index'%}" class="active">Home</a>
-                    <a href="#">About</a>
+                    <a href="{%url 'recipe_list'%}" class ="active">Recipes</a>
+                    <a href = "{%url 'profile'%}" class="active">Profile</a>
                 </div>
                 <div class="search-bar">
                     <form action="{% url 'search-recipe' %}" method="get">
@@ -439,6 +440,8 @@
             
             <div class="recipe-content-column">
                 <h1 class="recipe-title">{{recipe.title}}</h1>
+                <br>
+                <span class="info-value">Created by: {{user}}</span>
                 <div class="recipe-quick-info">
                     <div class="info-card">
                         <i class="fas fa-clock"></i>
