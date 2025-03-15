@@ -215,6 +215,7 @@ nav {
     box-shadow: 0 4px 12px rgba(56, 161, 105, 0.3);
     letter-spacing: 0.5px;
     font-size: 1rem;
+    max-width: 200px;
 }
 
 .btn:hover {
@@ -1017,9 +1018,9 @@ button, .btn, .recipe-card, .category-card {
                 <div class="title-with-images">
                     <h1>Recipes made easy with <span style="color: var(--primary)">RecipEazy</span></h1>
                     <div class="floating-images">
-                        <img src="{% static 'images/pancakes.jpeg' %}" alt="Recipe 1" class="float-img float-img-1">
-                        <img src="{% static 'images/fries.jpeg' %}" alt="Recipe 2" class="float-img float-img-2">
-                        <img src="{% static 'images/sausages.jpeg' %}" alt="Recipe 3" class="float-img float-img-3">
+                        <img src="{% static 'images/pancakes.jpeg' %}" alt="Pancakes" class="float-img float-img-1">
+                        <img src="{% static 'images/fries.jpeg' %}" alt="Fries" class="float-img float-img-2">
+                        <img src="{% static 'images/sausages.jpeg' %}" alt="Sausages" class="float-img float-img-3">
                     </div>
                 </div>
                 <p>The best recipes in one place. </p>
@@ -1054,18 +1055,12 @@ button, .btn, .recipe-card, .category-card {
                             </div>
                             <h3 class="recipe-title">{{recipe.title}}</h3>
                             <p class="recipe-desc">{{recipe.description}}</p>
-                            <div class="recipe-meta">
-                                <div class="recipe-rating">
-                                    
-                                </div>
-                                <div class="recipe-author">
-                                    <span></span>
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
                 </a>
                 {% endfor %}
+                <a href="{%url 'recipe_list'%}" class="btn">More recipes</a>
             </div>
         </div>
     </section>
@@ -1076,24 +1071,30 @@ button, .btn, .recipe-card, .category-card {
                 <h2>Categories of food</h2>
             </div>
             <div class="category-container">
+                <a href="{%url 'recipe-detail-category' category='Breakfast'%}">
                 <div class="category-card">
                     <img src="{% static 'images/breakfast2.jpeg' %}" alt="Quick meals">
                     <div class="category-content">
                         <h3>Breakfast</h3>
                     </div>
                 </div>
+                </a>
+                <a href="{%url 'recipe-detail-category' category='Lunch'%}">
                 <div class="category-card">
                     <img src="{% static 'images/lunch2.jpeg' %}" alt="Mains">
                     <div class="category-content">
                         <h3>Mains</h3>
                     </div>
                 </div>
+                </a>
+                <a href="{%url 'recipe-detail-category' category='Dessert'%}">
                 <div class="category-card">
                     <img src="{% static 'images/dessert.jpeg' %}" alt="Example Image">
                     <div class="category-content">
                         <h3>Desserts</h3>
                     </div>
                 </div> 
+                </a>
             </div>
         </div>
     </section>
