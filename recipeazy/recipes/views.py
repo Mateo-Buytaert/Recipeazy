@@ -12,7 +12,7 @@ from django.db.models import Avg, Count
 def index(request):
     if request.method == "GET":
         recipes = Recipe.objects.annotate(avg_rating = Avg("ratings__value")).order_by("-avg_rating")[:3]
-        return render(request, 'recipes/my_recipe_list.html', {'recipes': recipes})
+        return render(request, 'recipes/index.html', {'recipes': recipes})
 
 def recipe_list(request):
     recipes = Recipe.objects.all()[:15]
